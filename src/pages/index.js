@@ -1,9 +1,13 @@
 import React from 'React'
-import GlobalHeader from '../component/GlobalHeader/globalHeader'
+import BasicLayout from '../component/BasicLayout/BasicLayout'
 
 class App extends React.Component{
     render(){
-        return( <div><GlobalHeader /></div> )
+        return( 
+            <div>
+                <BasicLayout />
+            </div>
+        )
     }
 }
 

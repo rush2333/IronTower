@@ -26,14 +26,14 @@
   font-size: 16px;
   vertical-align: middle;
 }
-.menu {
+menu {
   line-height: 64px;
   border-bottom: none !important;
 }
-.menu :global(.anticon) {
+menu :global(.anticon) {
   margin-right: 8px;
 }
-.menu :global(.ant-dropdown-menu-item) {
+menu :global(.ant-dropdown-menu-item) {
   width: 160px;
 }
 .dropdown-button {

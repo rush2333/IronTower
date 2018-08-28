@@ -1,0 +1,7 @@
+.logo {
+  background: url('../../img//TieTa.png') no-repeat center;
+  float: left;
+  width: 180px;
+  background-size: cover;
+  height: 100%;
+}

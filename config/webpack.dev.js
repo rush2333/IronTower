@@ -21,7 +21,7 @@ const config = {
                 exclude:path.join(__dirname,'../node_modules')
             },
             {
-                test: /\.css$/,
+                test: /\.(css|less|s[ac]ss)$/,
                 exclude: path.join(__dirname, '../node_modules'),
                 use: [
                     {
@@ -31,18 +31,14 @@ const config = {
                         loader: 'css-loader',
                         options: {
                             modules: true,
-                            import:true,
-                            importLoaders:1
                         }
                     },
-                ]
-            },
-            {
-                test:/\.less$/,
-                use:[
-                    { loader:  'style-loader'},
-                    { loader: 'css-loader'},
-                    { loader:'less-loader'}
+                   { 
+                       loader: 'less-loader',
+                       options: {
+                           javascriptEnabled: true
+                       }
+                    }
                 ]
             },
             {
@@ -56,10 +52,7 @@ const config = {
                         loader: 'css-loader',
                     },
                     {
-                        loader: 'less-loader',
-                        options:{
-                            javascriptEnabled: true
-                        }
+                        loader: 'less-loader'
                     }
                 ]
             },
