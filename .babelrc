@@ -1,17 +1,8 @@
 {
     "presets": [
-        [
-            "es2015",
-            {
-                "loose": true
-            }
-        ],
-        "react"
+        "env"
     ],
     "plugins": [
-        "react-hot-loader/babel",
-        "transform-class-properties",
-        "transform-object-rest-spread",
         [
             "import",
             {
@@ -19,7 +10,8 @@
                 "libraryDirectory": "es",
                 "style": "css"
             }
-        ] 
-        
+        ],
+        "transform-class-properties",
+        "transform-object-rest-spread"
     ]
 }
