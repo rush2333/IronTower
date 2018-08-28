@@ -1,0 +1,25 @@
+{
+    "presets": [
+        [
+            "es2015",
+            {
+                "loose": true
+            }
+        ],
+        "react"
+    ],
+    "plugins": [
+        "react-hot-loader/babel",
+        "transform-class-properties",
+        "transform-object-rest-spread",
+        [
+            "import",
+            {
+                "libraryName": "antd",
+                "libraryDirectory": "es",
+                "style": "css"
+            }
+        ] 
+        
+    ]
+}
