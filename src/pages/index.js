@@ -3,11 +3,10 @@ import BasicLayout from '../component/BasicLayout/BasicLayout'
 
 class App extends React.Component{
     render(){
-        return( 
-            <div>
-                <BasicLayout />
-            </div>
-        )
+        return[
+               <BasicLayout />
+        ]
+
     }
 }
 
