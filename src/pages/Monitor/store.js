@@ -6,5 +6,8 @@ class Store {
     visible: false,
   }
   @observable history_data = [];
+  @observable months_data = [];
+  @observable dataSource = [];
+  @observable basicMsg = {};
 }
 export default new Store();

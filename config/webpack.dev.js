@@ -20,42 +20,26 @@ const config = {
                 loader: 'babel-loader',
                 exclude:path.join(__dirname,'../node_modules')
             },
-            {
-                test: /\.(css|less|s[ac]ss)$/,
-                exclude: path.join(__dirname, '../node_modules'),
-                use: [
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            modules: true,
-                        }
-                    },
-                   { 
-                       loader: 'less-loader',
-                       options: {
-                           javascriptEnabled: true
-                       }
-                    }
-                ]
-            },
-            {
-                test: /\.(css|less|s[ac]ss)$/,
-                include: path.join(__dirname, '../node_modules'),
-                use: [
-                    {
-                        loader: 'style-loader',
-                    },
-                    {
-                        loader: 'css-loader',
-                    },
-                    {
-                        loader: 'less-loader'
-                    }
-                ]
-            },
+           {
+               test: /\.css$/,
+               use:[
+                   'style-loader',
+                   {
+                   loader:'css-loader',
+                   options:{
+                       modules:true
+                   }
+               }],
+               exclude: path.join(__dirname, '../node_modules')
+           },
+           {
+               test:/\.css$/,
+               use:[
+                   'style-loader',
+                   'css-loader'
+               ],
+               include: path.join(__dirname, '../node_modules')
+           },
             {
                 test: /\.(jpe?g|png|gif|svg|woff|woff2|eot|otf|ttf)$/i,
                 use: [{

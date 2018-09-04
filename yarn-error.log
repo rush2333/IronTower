@@ -1,22 +1,21 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add postcss-modules -D
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js install
 
 PATH: 
-  C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\nodejs\;"D:\nodejs\;D:\nodejs\node_modules;D:\nodejs\node_global;";C:\Users\Rush2333\AppData\Local\Microsoft\WindowsApps;C:\Users\Rush2333\AppData\Local\Yarn\bin;C:\Users\Rush2333\AppData\Roaming\npm;C:\Users\Rush2333\AppData\Local\Programs\Microsoft VS Code\bin;
+  C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\windows\system32;C:\windows;C:\windows\System32\Wbem;C:\windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Intel\WiFi\bin\;C:\Program Files\Common Files\Intel\WirelessCommon\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files (x86)\Yarn\bin\;"D:\nodejs\;D:\nodejs\node_modules;D:\nodejs\node_global;";C:\Program Files\nodejs\;C:\Users\Rush2333\AppData\Local\Microsoft\WindowsApps;C:\Users\Rush2333\AppData\Local\Yarn\bin;C:\Users\Rush2333\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Rush2333\AppData\Roaming\npm
 
 Yarn version: 
   1.9.4
 
 Node version: 
-  8.11.4
+  10.9.0
 
 Platform: 
   win32 x64
 
 Trace: 
   Error: getaddrinfo ENOTFOUND registry.yarnpkg.com registry.yarnpkg.com:443
-      at errnoException (dns.js:50:10)
-      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:92:26)
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:57:26)
 
 npm manifest: 
   {
@@ -28,7 +27,8 @@ npm manifest:
       "start": "parcel src/index.html",
       "build": "parcel build src/index.html",
       "test": "echo \"Error: no test specified\" && exit 1",
-      "dev:server": "node src/server.js"
+      "dev:server": "node src/server.js",
+      "build:server": "webpack --config build/webpack.dev.js --open"
     },
     "author": "rush2333",
     "license": "ISC",
@@ -36,6 +36,7 @@ npm manifest:
       "ant-design-pro": "^1.4.4",
       "antd": "^3.2.3",
       "autoprefixer": "^9.1.3",
+      "cross-env": "^5.2.0",
       "express": "^4.16.3",
       "lodash": "^4.17.10",
       "mobx": "^5.1.0",
@@ -46,7 +47,10 @@ npm manifest:
       "react-dom": "^16.4.2",
       "react-router": "^4.3.1",
       "react-router-dom": "^4.3.1",
-      "warning": "^4.0.2"
+      "warning": "^4.0.2",
+      "webpack": "^4.17.1",
+      "webpack-cli": "^3.1.0",
+      "webpack-dev-server": "^3.1.7"
     },
     "devDependencies": {
       "babel-plugin-import": "^1.8.0",

@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
-import { Card, DatePicker, Input, Table } from 'antd';
+import React, { Component, Fragment } from 'react';
+import { Card, DatePicker, Breadcrumb, Input, Table, Tabs } from 'antd';
+import data from './data';
 
+const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 const tabList = [
   {
@@ -42,12 +44,15 @@ const columns = [
 class ErrorLog extends Component {
   render(){
     return(
-      <div>
+      <Fragment>
+        <Breadcrumb>
+          <Breadcrumb.Item>故障记录</Breadcrumb.Item>
+        </Breadcrumb>
         <Card tabList={tabList}>
           <div style={{marginBottom: 10}}>选择日期：<RangePicker /> </div>
-          <Table columns={columns}> </Table>
+          <Table columns={columns} dataSource={data}> </Table>
         </Card>
-      </div>
+      </Fragment>
       )
   }
 }

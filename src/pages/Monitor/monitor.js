@@ -12,31 +12,38 @@ import {
   Menu,
   Dropdown,
   Input,
-  Button} from 'antd';
+  Button,
+  Breadcrumb} from 'antd';
 import EditAlarm from './editAlarm';
 import store from './store';
 import { observer } from "mobx-react";
-import style from './monitor.css'
+import style from './monitor.css';
 import Charts from 'ant-design-pro/lib/Charts';
+import { Link } from 'react-router-dom';
+import request from '../../helpers/request';
+import moment from 'moment';
 
-const { TimelineChart } = Charts
+const url = 'getCurrentData.shtml?equipmentId=868744034584411';
+const url2 = 'getHistoryDataByInterval.shtml';
+const { TimelineChart } = Charts;
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
-
+const startTime = moment().format('2018-09-01');
+const endTime = moment().format('YYYY-MM-DD');
 const chartData = [];
-for (let i = 0; i < 20; i += 1) {
+for (let i = 0; i < 10; i += 1) {
   chartData.push({
     x: (new Date().getTime()) + (1000 * 60 * 30 * i),
-    y1: Math.floor(Math.random() * 100) + 1000,
-    y2: Math.floor(Math.random() * 100) + 10,
+    y1: Math.floor(Math.random() * 10),
   });
 }
 
 const columns= [
     {
       title:'ID',
-      dataIndex:'equipmentId',
-      key:'ID'},
+      dataIndex:'id',
+      key:'ID',
+    },
     {
       title:'名称',
       dataIndex:'equipmentName',
@@ -52,37 +59,43 @@ const workColumns = [
     {
       title:'状态',
       dataIndex:'messageType',
-      key:'messageType'
+      key:'messageType',
+    width: 90
+
     },
     {
       title:'倾角',
       dataIndex:'',
-      key:'angle'
+      key:'angle',
+      width: 90
+
     },
     {
       title:'x轴倾角',
       dataIndex:'angleX',
-      key:'angleX'
+      key:'angleX',
+      width: 90
+
     },
     {
       title:'y轴倾角',
       dataIndex:'angleY',
-      key:'angleY'
+      key:'angleY',
+      width: 90
+
     },
     {
       title:'平均电池电压',
       dataIndex:'power',
-      key:'power'
-    },
-    {
-      title:'平均工作温度',
-      dataIndex:'temperature',
-      key:'temperature'
+      key:'power',
+      width: 90
+
     },
     {
       title:'日期',
       dataIndex:'eventTime',
-      key:'eventTime'
+      key:'eventTime',
+      width: 150
     },
 ];
 const tabListNoTitle = [{
@@ -91,10 +104,7 @@ const tabListNoTitle = [{
 }, {
   key: '电池工作图',
   tab: '电池工作图',
-}, {
-  key: '工作温度图',
-  tab: '工作温度图',
-}];
+},];
 const topColResponsiveProps = {
   xs: 24,
   sm: 12,
@@ -103,46 +113,74 @@ const topColResponsiveProps = {
   xl: 6,
   style: { marginBottom: 24 },
 };
+const chartsExtra = (
+  <div>
+    日期：{moment().format('YYYY年MM月DD日')}
+      </div>
+)
 
 @observer
 class Monitor extends React.Component{
   constructor(props) {
     super(props);
   }
+  getMachineData = () => {
+    request({
+      url: `/informationApi/${url}`,
+      method: 'GET',
+      success: (data) => {
+        store.dataSource = [];
+        store.dataSource.push(data);
+        Object.assign(store.basicMsg,data);
+      }
+    })
+  }
+  getMonthData = () => {
+    request({
+      url: `/informationApi/${url2}?equipmentId=868744034584411&startTime=${startTime}&endTime=${endTime}`,
+      method:'GET',
+      success:(res)=>{
+        console.log(res);
+        store.months_data = res;
+      }
+    })
+  }
+  componentDidMount(){
+    this.getMachineData();
+    this.getMonthData();
+  }
   render(){
-    let { alarm_modal } = store;
-    const chartsExtra = (
-      <div>
-        日期：
-      </div>
-    )
+    let { alarm_modal, dataSource, basicMsg, months_data } = store;
+    let { id, equipmentName, alarmX, alarmY, angleX, angleY, power} = basicMsg;
     return(
     <Fragment>
+        <Breadcrumb>
+          <Breadcrumb.Item>监控页</Breadcrumb.Item>
+        </Breadcrumb>
       <Row gutter={12} style={{height:900}}>
-        <Col span={5} style={{height:900}}>
+        <Col span={6} style={{height:900}}>
           <Card title='工作铁塔' style={{height:"100%"}}>
             <div>
               <Search
-                placeholder="input search text"
                 onSearch={value => console.log(value)}
                 enterButton
                 style={{marginBottom:5}}
               />
-              <Table columns={columns} size='small' />
+              <Table dataSource={dataSource} columns={columns} size='small' />
             </div>
           </Card>
         </Col>
         <Col>
           <Row gutter={12}>
-            <Col span={5} style={{height:450}}>
+            <Col span={4} style={{height:450}}>
               <Card title='基本信息' style={{ height:"100%"}}>
-                <h3>ID:</h3>
-                <h3>名称:</h3>
-                <h3>所处地质:</h3>
-                <h3>地址:</h3>
-                <h3>启用日期:</h3>
-                <h3>传感器已使用时长:</h3>
-                <h3>警报指数: <Button size='small' type='primary' style={{float:'right'}} onClick={()=>alarm_modal.visible=true}>编辑</Button></h3>
+                <h4>ID: <span className={style.basicMessage}>{id}</span></h4>
+                <h4>名称: <span className={style.basicMessage}>{equipmentName}</span></h4>
+                <h4>所处地质: <span className={style.basicMessage}>平原</span></h4>
+                <h4>地址: <span className={style.basicMessage}>广东省江门市蓬江区</span></h4>
+                <h4>启用日期: <span className={style.basicMessage}>2018-08-28</span></h4>
+                <h4>传感器已使用时长: <span className={style.basicMessage}>127H</span></h4>
+                <h4>警报指数: <Button size='small' type='primary' style={{float:'right'}} onClick={()=>alarm_modal.visible=true}>编辑</Button></h4>
               </Card>
             </Col>
             <Col span={14} style={{marginBottom: 12}} style={{ height:180, marginBottom:10}}>
@@ -153,36 +191,41 @@ class Monitor extends React.Component{
                     <div style={{ flex:1, textAlign:'center', fontWeight:'bold', fontSize:16 }}><span>x轴倾角</span></div>
                     <div style={{ flex:1, textAlign:'center', fontWeight:'bold', fontSize:16 }}><span>y轴倾角</span></div>
                     <div style={{ flex:1, textAlign:'center', fontWeight:'bold', fontSize:16 }}><span>电池电压</span></div>
-                    <div style={{ flex:1, textAlign:'center', fontWeight:'bold', fontSize:16 }}><span>工作温度</span></div>
                   </div>
                   <div style={{display:'flex',marginTop:10}}>
                     <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>0</span></div>
-                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>0</span></div>
-                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>0</span></div>
-                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>4.00V</span></div>
-                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>78℃</span></div>
+                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>{angleX}</span></div>
+                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>{angleY}</span></div>
+                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>{power}</span></div>
                   </div>
               </Card>
             </Col>
             <Col span={14} style={{ height: 260 }}>
-              <Card title='本月工作情况' style={{ height: "100%" }} extra={<a>历史工作情况</a>}>
-                <Table columns={workColumns} size={"small"}/>
+                <Card title='本月工作情况' style={{ height: "100%" }} extra={<Link to='/historyStatus'>历史工作情况</Link> }>
+                  <Table columns={workColumns} dataSource={months_data} size={"small"} pagination={false} scroll={{ y: 120 }}/>
               </Card>
             </Col>
-            <Col span={19} style={{marginTop:10, height:440}}>
+            <Col span={18} style={{marginTop:10, height:440}}>
                 <Card style={{ height: '100%' }} bordered={false} bodyStyle={{ padding: '0 0 32px 0' }}>
                   <div className={style.chartsCard}>
                     <Tabs size='large' tabBarExtraContent={chartsExtra}>
-                      <TabPane tab="Tab 1" key="1">
+                      <TabPane tab="倾角图" key="1">
                         <div style={{ padding: '0 24px',marginTop:-30 }}>
                           <TimelineChart
                             height={300}
                             data={chartData}
-                            titleMap={{ y1: '客流量', y2: '支付笔数' }}
+                            titleMap={{ y1: '倾角' }}
                           />
                         </div>
                       </TabPane>
-                      <TabPane tab="Tab 2" key="2">Content of tab 2</TabPane>
+                      <TabPane tab="电池电压图" key="2">
+                        <div style={{ padding: '0 24px', marginTop: -30 }}>
+                          <TimelineChart
+                            height={300}
+                            data={chartData}
+                            titleMap={{ y1: '电压', }}
+                          />
+                        </div></TabPane>
                     </Tabs>
                   </div>
                 </Card>

@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
-import { Card, Table, DatePicker, Button } from 'antd';
+import React, {Component, Fragment} from 'react';
+import { Card, Table, DatePicker, Button, Breadcrumb } from 'antd';
 import request from '../../../helpers/request';
 import store from '../store';
 import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 
 const { RangePicker} = DatePicker;
 const url = 'getHistoryDataByInterval.shtml?equipmentId=868744034584411&startTime=2018-07-01&endTime=2018-08-31'
@@ -43,16 +44,12 @@ const columns = [
     dataIndex:'power',
     key:'power'
   },
-  //  {
-  //   title: '平均工作温度',
-  //   dataIndex: 'temperature',
-  // },
   {
     title:'操作',
     render: () => (
-      <React.Fragment>
-        <a>详情</a>
-      </React.Fragment>
+      <Fragment>
+        <Link to='/detail'>详情</Link>
+      </Fragment>
     )
   }
 ]
@@ -75,10 +72,16 @@ class HistoryStatus extends Component{
   render(){
     let { history_data } = store
     return(
-      <Card>
-        <div style={{marginBottom:10}} >选择日期：<RangePicker /></div>
-        <Table columns={columns} onChange={onChange} dataSource={history_data} rowKey='eventTime'></Table>
-      </Card>
+      <Fragment>
+        <Breadcrumb>
+          <Breadcrumb.Item> <Link to='/monitor'>监控页</Link> </Breadcrumb.Item>
+          <Breadcrumb.Item>历史工作情况</Breadcrumb.Item>
+        </Breadcrumb>
+        <Card>
+          <div style={{marginBottom:10}} >选择日期：<RangePicker /></div>
+          <Table columns={columns} onChange={onChange} dataSource={history_data} rowKey='eventTime'></Table>
+        </Card>
+      </Fragment>
     )
   }
   componentDidMount(){

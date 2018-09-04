@@ -5,12 +5,13 @@ import style from './Layout.css'
 import NoticeIcon from 'ant-design-pro/lib/NoticeIcon';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
-import Monitor from '../../pages/Monitor/monitor'
-import HistoryStatus from '../../pages/Monitor/historyStatus/historyStatus'
-import ErrorLog from '../../pages/ErrorLog/ErrorLog'
-import Location from '../../pages/Location/Location'
-import Detail from '../../pages/Monitor/historyStatus/detail/detail';
 import Routers from '../../routes/routes';
+
+// import Monitor from '../../pages/Monitor/monitor'
+// import HistoryStatus from '../../pages/Monitor/historyStatus/historyStatus'
+// import ErrorLog from '../../pages/ErrorLog/ErrorLog'
+// import Location from '../../pages/Location/Location'
+// import Detail from '../../pages/Monitor/historyStatus/detail/detail';
 
 const { Header, Content, Footer, } = Layout;
 
@@ -179,12 +180,7 @@ class BasicLayout extends React.Component{
                   </div>
                 </Header>
                 <Content style={{ margin: '24px 24px 0', height: '100%' }}>
-                  {/* <ErrorLog /> */}
-                  {/* <Monitor /> */}
-                  {/* <HistoryStatus /> */}
-                  {/* <Location/> */}
-                  {/* <Detail/> */}
-                  <Routers />
+                  <Routers key='first'/>
                 </Content>
                 <Footer style={{ textAlign: 'center' }}>
                   copyright@2018 五邑大学系统工程研究所
