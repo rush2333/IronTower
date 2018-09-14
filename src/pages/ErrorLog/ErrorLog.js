@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Card, DatePicker, Breadcrumb, Input, Table, Tabs } from 'antd';
 import data from './data';
+import towerData from './towerData';
 
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
@@ -48,9 +49,16 @@ class ErrorLog extends Component {
         <Breadcrumb>
           <Breadcrumb.Item>故障记录</Breadcrumb.Item>
         </Breadcrumb>
-        <Card tabList={tabList}>
+        <Card>
           <div style={{marginBottom: 10}}>选择日期：<RangePicker /> </div>
-          <Table columns={columns} dataSource={data}> </Table>
+          <Tabs>
+            <TabPane tab='铁塔异常' key='1'>
+              <Table columns={columns} dataSource={towerData}> </Table>    
+            </TabPane>
+            <TabPane tab='传感器异常' key='2'>
+              <Table columns={columns} dataSource={data}> </Table>    
+            </TabPane>
+          </Tabs>
         </Card>
       </Fragment>
       )

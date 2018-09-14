@@ -46,13 +46,13 @@ export default class SiderMenu extends React.Component {
                           </Link>
                         </Menu.Item>
                       
-                        <SubMenu
+                        {/* <SubMenu
                             key="sub2"
                             title={<span><Icon type="team" /><span>Team</span></span>}
                         >
                             <Menu.Item key="6">Team 1</Menu.Item>
                             <Menu.Item key="8">Team 2</Menu.Item>
-                        </SubMenu>
+                        </SubMenu> */}
                     </Menu>
                 </Sider>
         );

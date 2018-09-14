@@ -42,7 +42,7 @@ const columns= [
     {
       title:'ID',
       dataIndex:'id',
-      key:'ID',
+      key:'id',
     },
     {
       title:'名称',
@@ -140,7 +140,6 @@ class Monitor extends React.Component{
       url: `/informationApi/${url2}?equipmentId=868744034584411&startTime=${startTime}&endTime=${endTime}`,
       method:'GET',
       success:(res)=>{
-        console.log(res);
         store.months_data = res;
       }
     })
@@ -152,22 +151,21 @@ class Monitor extends React.Component{
   render(){
     let { alarm_modal, dataSource, basicMsg, months_data } = store;
     let { id, equipmentName, alarmX, alarmY, angleX, angleY, power} = basicMsg;
+    let angle = Math.atan2(angleX,angleY).toFixed(3);
     return(
     <Fragment>
         <Breadcrumb>
           <Breadcrumb.Item>监控页</Breadcrumb.Item>
         </Breadcrumb>
-      <Row gutter={12} style={{height:900}}>
+      <Row gutter={12} >
         <Col span={6} style={{height:900}}>
           <Card title='工作铁塔' style={{height:"100%"}}>
-            <div>
               <Search
                 onSearch={value => console.log(value)}
                 enterButton
                 style={{marginBottom:5}}
               />
               <Table dataSource={dataSource} columns={columns} size='small' />
-            </div>
           </Card>
         </Col>
         <Col>
@@ -193,7 +191,7 @@ class Monitor extends React.Component{
                     <div style={{ flex:1, textAlign:'center', fontWeight:'bold', fontSize:16 }}><span>电池电压</span></div>
                   </div>
                   <div style={{display:'flex',marginTop:10}}>
-                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>0</span></div>
+                    <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>{angle}</span></div>
                     <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>{angleX}</span></div>
                     <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>{angleY}</span></div>
                     <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>{power}</span></div>

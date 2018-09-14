@@ -6,7 +6,9 @@ import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 
 const { RangePicker} = DatePicker;
-const url = 'getHistoryDataByInterval.shtml?equipmentId=868744034584411&startTime=2018-07-01&endTime=2018-08-31'
+const alarm_type = ['正常', '报警'];
+
+const url = 'getHistoryDataByInterval.shtml?equipmentId=868744034584411&startTime=2018-07-01&endTime=2018-09-05'
 const columns = [
   {
     title:'日期',
@@ -22,7 +24,10 @@ const columns = [
   {
     title:'x轴报警',
     dataIndex:'alarmX',
-    key:'alarmX'
+    key:'alarmX',
+    render:(text)=> {
+     return <span>{alarm_type[text]}</span>
+    }
   },
   {
     title:'x轴倾角',
@@ -32,7 +37,10 @@ const columns = [
    {
     title: 'y轴报警',
     dataIndex: 'alarmY',
-    key:'alarmY'
+    key:'alarmY',
+     render: (text) => {
+       return <span>{alarm_type[text]}</span>
+     }
   },
   {
     title:'y轴倾角',
@@ -46,11 +54,12 @@ const columns = [
   },
   {
     title:'操作',
-    render: () => (
+    render: (text, record) => {
+      return (
       <Fragment>
-        <Link to='/detail'>详情</Link>
+          <Link to={{ pathname: '/detail', state: { status: record.messageType,angleX:record.angleX,angleY:record.angleY,power:record.power}}}>详情</Link>
       </Fragment>
-    )
+    )}
   }
 ]
 

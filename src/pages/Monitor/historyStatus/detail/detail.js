@@ -10,13 +10,16 @@ const chartData = [];
 for (let i = 0; i < 20; i += 1) {
   chartData.push({
     x: (new Date().getTime()) + (1000 * 60 * 30 * i),
-    y1: Math.floor(Math.random() * 100) + 1000,
-    y2: Math.floor(Math.random() * 100) + 10,
+    y1: Math.floor(Math.random() * 10),
   });
 }
 
 export default class Detail extends Component {
   render(){
+    let {location} = this.props;
+    let {state} = location;
+    let {angleX,angleY,status,power} = state;
+    let angle = Math.atan2(angleX, angleY).toFixed(3);
     return(
       <Fragment>
         <Breadcrumb>
@@ -28,11 +31,11 @@ export default class Detail extends Component {
           <div>
             <h2>日期：{moment().format("YYYY年MM月DD日")}</h2>
             <div style={{ marginTop: 15 }}>
-              <span className={style.contentBody}>状态：<span className={style.content}></span></span>
-              <span className={style.contentBody}>倾角：<span className={style.content}></span></span>
-              <span className={style.contentBody}>X轴倾角：<span className={style.content}></span></span>
-              <span className={style.contentBody}>Y轴倾角：<span className={style.content}></span></span>
-              <span className={style.contentBody}>平均电池电压：<span className={style.content}></span></span>
+              <span className={style.contentBody}>状态：<span className={style.content}>{status}</span></span>
+              <span className={style.contentBody}>倾角：<span className={style.content}>{angle}</span></span>
+              <span className={style.contentBody}>X轴倾角：<span className={style.content}>{angleX}</span></span>
+              <span className={style.contentBody}>Y轴倾角：<span className={style.content}>{angleY}</span></span>
+              <span className={style.contentBody}>平均电池电压：<span className={style.content}>{power}</span></span>
             </div>
           </div>
         </Card>

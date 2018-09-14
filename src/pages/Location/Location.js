@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {renderToString} from 'react-dom/server';
 import { Card, Table, Tabs, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import Charts from 'ant-design-pro/lib/Charts';
@@ -14,6 +15,7 @@ for (let i = 0; i < 20; i += 1) {
     y1: Math.floor(Math.random() * 10),
   });
 }
+
 class Location extends Component{
   render(){
     return(
@@ -61,12 +63,24 @@ class Location extends Component{
       </div>
     )
   }
-      goMonitor = (e) =>{
-    e.preventDefault();
+  goMonitor = (e) =>{
     history.push('/monitor');
   }
+  
   componentDidMount(){
-
+    window.goMonitor = this.goMonitor
+    const textContent = (
+      <div>
+        <span>地址：江门市蓬江区永盛路</span><br />
+        <span> 纬度：22.57511678</span><br />
+        <span>经度：113.07812534</span><br />
+        <button>111</button>
+        <Button>关联分析</Button>
+        <Button id='btn1'>实时监控</Button>
+      </div>
+    )
+    let content = renderToString(textContent);
+    console.log(content);
     let BMap = window.BMap;
     let map = new BMap.Map('gps');                // 创建地图实例  
     map.addControl(new BMap.MapTypeControl({
@@ -87,9 +101,7 @@ class Location extends Component{
       enableMessage: true,//设置允许信息窗发送短息
     }
     var infoWindow = new BMap.InfoWindow(
-      "地址：江门市蓬江区永盛路<br/>"+
-      "纬度：22.57511678<br/>"+
-      "经度：113.07812534"
+      `${content}`
     , opts);  // 创建信息窗口对象 
     marker.addEventListener("click", function () {
       map.openInfoWindow(infoWindow, point); //开启信息窗口
