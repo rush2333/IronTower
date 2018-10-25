@@ -1,5 +1,5 @@
 import React from 'react';
-import {Layout, Menu, Icon, Dropdown, Tag} from 'antd';
+import { Layout, Menu, Icon, Dropdown, Tag } from 'antd';
 import SideMenu from '../SideMenu/SideMenu'
 import style from './Layout.css'
 import NoticeIcon from 'ant-design-pro/lib/NoticeIcon';
@@ -97,98 +97,102 @@ const data = [{
   type: '待办',
 }];
 
-class BasicLayout extends React.Component{
-    render(){
-        const menu = (
-            <Menu selectedKeys={[]}>
-                <Menu.Item>
-                    <Icon type="user" />个人中心
+class BasicLayout extends React.Component {
+  render() {
+    const menu = (
+      <Menu selectedKeys={[]}>
+        <Menu.Item>
+          <Icon type="user" />个人中心
                 </Menu.Item>
-                <Menu.Item key='logout'>
-                    <Icon type="logout" />退出
+        <Menu.Item key='logout'>
+          <Icon type="logout" />退出
                 </Menu.Item>
-            </Menu>
-        );
-        
-         function getNoticeData(notices) {
-        if (notices.length === 0) {
-          return {};
-        }
-        const newNotices = notices.map((notice) => {
-          const newNotice = { ...notice };
-          if (newNotice.datetime) {
-            newNotice.datetime = moment(notice.datetime).fromNow();
-          }
-          // transform id to item key
-          if (newNotice.id) {
-            newNotice.key = newNotice.id;
-          }
-          if (newNotice.extra && newNotice.status) {
-            const color = ({
-              todo: '',
-              processing: 'blue',
-              urgent: 'red',
-              doing: 'gold',
-            })[newNotice.status];
-            newNotice.extra = <Tag color={color} style={{ marginRight: 0 }}>{newNotice.extra}</Tag>;
-          }
-          return newNotice;
-        });
-        return groupBy(newNotices, 'type');
-      }
+      </Menu>
+    );
 
-      const noticeData = getNoticeData(data);
-      function onItemClick() {
-        console.log('click');
+    function getNoticeData(notices) {
+      if (notices.length === 0) {
+        return {};
       }
-        return(
-          <div>
-            <Layout style={{ minHeight: '100vh' }}>
-              <SideMenu />
-              <Layout>
-                <Header style={{ background: '#fff', padding: 0 }}>
-                <div className={style.header}>
-                  <div className={style.right}>
-                    <Menu mode='horizontal' className={style.menu}>
-                        <NoticeIcon
-                          className={style.action}
-                          count={5}
-                          onItemClick={onItemClick}
-                          onClear={(TabTitle) => { console.log('clear') }}
-                        >
-                          <NoticeIcon.Tab
-                            list={noticeData['通知']}
-                            title="通知"
-                            emptyText="你已查看所有通知"
-                          />
-                          <NoticeIcon.Tab
-                            list={noticeData['消息']}
-                            title="消息"
-                            emptyText="您已读完所有消息"
-                          />
-                          <NoticeIcon.Tab
-                            list={noticeData['待办']}
-                            title="待办"
-                            emptyText="你已完成所有待办"
-                          />
-                        </NoticeIcon>                      
-                        <Dropdown overlay={menu} trigger={['click']} placement='bottomCenter'>
-                          <span className={`${style["dropdown-button"]} ${style.action}`}><Icon type='user' />admin</span>
-                        </Dropdown>
-                    </Menu>
-                  </div>
-                  </div>
-                </Header>
-                <Content style={{ margin: '24px 24px 0', height: '100%' }}>
-                  <Routers key='first'/>
-                </Content>
-                <Footer style={{ textAlign: 'center' }}>
-                  copyright@2018 五邑大学系统工程研究所
-                 </Footer>
-              </Layout>
-            </Layout>
-          </div>
-        )
+      const newNotices = notices.map((notice) => {
+        const newNotice = { ...notice };
+        if (newNotice.datetime) {
+          newNotice.datetime = moment(notice.datetime).fromNow();
+        }
+        // transform id to item key
+        if (newNotice.id) {
+          newNotice.key = newNotice.id;
+        }
+        if (newNotice.extra && newNotice.status) {
+          const color = ({
+            todo: '',
+            processing: 'blue',
+            urgent: 'red',
+            doing: 'gold',
+          })[newNotice.status];
+          newNotice.extra = <Tag color={color} style={{ marginRight: 0 }}>{newNotice.extra}</Tag>;
+        }
+        return newNotice;
+      });
+      return groupBy(newNotices, 'type');
     }
+
+    const noticeData = getNoticeData(data);
+    function onItemClick() {
+      console.log('click');
+    }
+    return (
+      <div>
+        <Layout style={{ minHeight: '100vh' }}>
+          <SideMenu />
+          <Layout>
+            <Header style={{ background: '#fff', padding: 0 }}>
+              <div className={style.header}>
+                <div className={style.right}>
+                  <Menu mode='horizontal' className={style.menu}>
+                    <NoticeIcon
+                      className={style.action}
+                      count={5}
+                      onItemClick={onItemClick}
+                      onClear={(TabTitle) => { console.log('clear') }}
+                    >
+                      <NoticeIcon.Tab
+                        list={noticeData['通知']}
+                        title="通知"
+                        emptyText="你已查看所有通知"
+                      />
+                      <NoticeIcon.Tab
+                        list={noticeData['消息']}
+                        title="消息"
+                        emptyText="您已读完所有消息"
+                      />
+                      <NoticeIcon.Tab
+                        list={noticeData['待办']}
+                        title="待办"
+                        emptyText="你已完成所有待办"
+                      />
+                    </NoticeIcon>
+                    <Dropdown overlay={menu} trigger={['click']} placement='bottomCenter'>
+                      <span className={`${style["dropdown-button"]} ${style.action}`}><Icon type='user' />admin</span>
+                    </Dropdown>
+                  </Menu>
+                </div>
+              </div>
+            </Header>
+            <Content style={{ margin: '24px 24px 0', height: '100%', width: '100%' }}>
+              <div style={{
+                width: '100%', maxWidth: 1600, overflow: 'hidden'
+              }}>
+                <Routers key='first' />
+              </div>
+            </Content>
+            <Footer style={{ textAlign: 'center' }}>
+              copyright@2018 五邑大学系统工程研究所
+                 </Footer>
+          </Layout>
+        </Layout>
+      </div>
+    )
+  }
 }
 export default BasicLayout

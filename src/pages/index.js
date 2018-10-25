@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 import BasicLayout from '../component/BasicLayout/BasicLayout'
 
 class App extends React.Component{

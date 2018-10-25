@@ -3,16 +3,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './pages/index';
 import {
-    BrowserRouter
+  BrowserRouter as Router,
 } from 'react-router-dom'
-
+import history from './history'
 const root = document.getElementById('root');
 
 const render = (Com) => {
     ReactDOM.hydrate(
-      <BrowserRouter>
+      <Router>
         <Com />
-      </BrowserRouter>
+      </Router>
     ,root)
 };
 

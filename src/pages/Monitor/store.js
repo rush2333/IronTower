@@ -5,6 +5,14 @@ class Store {
     loading: false,
     visible: false,
   }
+  @observable initialize_modal = {
+    loading: false,
+    visible: false
+  }
+  @observable initialData = [];
+  @observable fetchList = {};
+  @observable realtimeData = {};
+  @observable initialParams = {};
   @observable history_data = [];
   @observable months_data = [];
   @observable dataSource = [];

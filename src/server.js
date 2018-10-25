@@ -16,11 +16,15 @@ const options = {
 // 使用 file 和 options 参数，初始化新的 bundler
 const bundler = new Bundler(file, options);
 
-app.use('/informationApi/*',proxy({
-  target:'http://iot.zc-sensor.com/nbiot/',
-  changeOrigin:true
-}))
+// app.use('/v1/*',proxy({
+//   target:'http://oil.mengant.cn/api/',
+//   changeOrigin:true
+// }))
 
+app.use('/api/*', proxy({
+  target: 'http://120.237.31.12:1935/',
+  changeOrigin: true
+}))
 // 让 express 使用 bundler 中间件，这将让 parcel 处理你 express 服务器上的每个请求
 app.use(bundler.middleware());
 

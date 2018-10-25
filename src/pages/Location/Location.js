@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {renderToString} from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import { Card, Table, Tabs, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import Charts from 'ant-design-pro/lib/Charts';
@@ -16,20 +16,20 @@ for (let i = 0; i < 20; i += 1) {
   });
 }
 
-class Location extends Component{
-  render(){
-    return(
-      <div style={{width:'100%',height:'100%'}}>
+class Location extends Component {
+  render() {
+    return (
+      <div style={{ width: '100%', height: '100%' }}>
         <div>GPS</div>
-        <div id='gps' 
-            style={{
+        <div id='gps'
+          style={{
             width: '100%',
             height: 600
-        }}></div>
+          }}></div>
         <div>
           <Card bodyStyle={{ padding: '0 0 32px 0' }}>
             <div className={style.chartsCard}>
-              <Tabs size='small' style={{paddingLeft: 16}}>
+              <Tabs size='small' style={{ paddingLeft: 16 }}>
                 <TabPane tab="铁塔1" key="1">
                   <div>倾角变化图</div>
                   <div style={{ padding: '0 24px', marginTop: -30 }}>
@@ -40,7 +40,8 @@ class Location extends Component{
                     />
                   </div>
                 </TabPane>
-                <TabPane tab="铁塔2" key="2">                  <div>倾角变化图</div>
+                <TabPane tab="铁塔2" key="2">
+                  <div>倾角变化图</div>
                   <div style={{ padding: '0 24px', marginTop: -30 }}>
                     <TimelineChart
                       height={190}
@@ -63,24 +64,22 @@ class Location extends Component{
       </div>
     )
   }
-  goMonitor = (e) =>{
+  goMonitor = (e) => {
     history.push('/monitor');
   }
-  
-  componentDidMount(){
+
+  componentDidMount() {
     window.goMonitor = this.goMonitor
     const textContent = (
       <div>
         <span>地址：江门市蓬江区永盛路</span><br />
         <span> 纬度：22.57511678</span><br />
         <span>经度：113.07812534</span><br />
-        <button>111</button>
         <Button>关联分析</Button>
         <Button id='btn1'>实时监控</Button>
       </div>
     )
     let content = renderToString(textContent);
-    console.log(content);
     let BMap = window.BMap;
     let map = new BMap.Map('gps');                // 创建地图实例  
     map.addControl(new BMap.MapTypeControl({
@@ -88,7 +87,7 @@ class Location extends Component{
         BMAP_NORMAL_MAP,
         BMAP_HYBRID_MAP
       ]
-    }));	  
+    }));
     var point = new BMap.Point(113.07812534, 22.57511678);  // 创建点坐标  
     map.centerAndZoom(point, 15);                 // 初始化地图，设置中心点坐标和地图级别  
     var marker = new BMap.Marker(point);  // 创建标注
@@ -102,10 +101,15 @@ class Location extends Component{
     }
     var infoWindow = new BMap.InfoWindow(
       `${content}`
-    , opts);  // 创建信息窗口对象 
+      , opts);  // 创建信息窗口对象 
     marker.addEventListener("click", function () {
       map.openInfoWindow(infoWindow, point); //开启信息窗口
+      let btn1 = document.getElementById('btn1');
+      btn1.onclick = function(){
+        alert('111')
+      }
     });
+   
   }
 }
 export default Location
