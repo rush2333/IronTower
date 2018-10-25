@@ -29,12 +29,13 @@ class EditAlarm extends Component{
         res = JSON.parse(res)
         res = JSON.parse(res);
         alert(res.msg)
+        this.deviceInit(imei, angle_x, angle_y, alarm_x, alarm_y)
+
       },
       complete: () => {
         store.alarm_modal.visible = false
       }
     })
-    this.deviceInit(imei, angle_x, angle_y, alarm_x, alarm_y)
   }
   deviceInit = (imei,angle_x,angle_y,alarm_x,alarm_y) => {                                     /**设备初始化 */
     request({
@@ -48,7 +49,6 @@ class EditAlarm extends Component{
         "Y1": alarm_y
       },
       success: (res) => {
-        console.log(res);
         // res = JSON.parse(res);
         // let id = res.id;
         // this.initData()
