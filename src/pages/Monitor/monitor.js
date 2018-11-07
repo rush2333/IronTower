@@ -29,7 +29,6 @@ import moment from 'moment';
 const { TimelineChart } = Charts;
 const Search = Input.Search;
 const TabPane = Tabs.TabPane;
-
 const route = 'http://oil.mengant.cn/api';
 const now = new Date();
 now.setDate(1);
@@ -70,6 +69,9 @@ const chartsExtra = (
 
 @observer
 class Monitor extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   data = [{
     "params": {
       "angleX": 200
@@ -78,26 +80,19 @@ class Monitor extends React.Component {
   columns = [
     {
       title: 'ID',
-      dataIndex: 'id',
+      dataIndex: 'Tower_id',
     },
     {
       title: 'IMEI',
       dataIndex: 'imei',
       render: (text, record, index) => {
-        return <a href="#" onClick={() => { this.getNowData(text); this.getDeviceData(text); this.getInitData(text); store.basicMsg = record;console.log(store.basicMsg) }}>{text}</a>
+        return <a onClick={(e) => { e.preventDefault }}>{text}</a>
       }
     },
     {
       title: '设备名称',
       dataIndex: 'title',
     },
-    {
-      title: '实时状态',
-      dataIndex: 'state',
-      render: (text) => (
-        <span>{state_type[text]}</span>
-      )
-    }
   ];
   workColumns = [
     {
@@ -142,96 +137,10 @@ class Monitor extends React.Component {
       width: 150
     },
   ];
-  constructor(props) {
-    super(props);
-  }
-  getMachineData = () => {
-    request({
-      url: `${route}/v1/devices`,
-      method: 'GET',
-      data: {
-        page: 1,
-        size: 10
-      },
-      success: (data) => {
-        data = JSON.parse(data)
-        store.fetchList = data;
-        store.basicMsg = data.data[0]
-        let imei = store.fetchList.data[0].imei;
-        this.getNowData(imei);
-        this.getDeviceData(imei);
-        this.getInitData(imei);
-      }
-    })
-  }
-  getNowData = (imei) => {
-    request({
-      url: `${route}/v1/device/current`,
-      method: 'GET',
-      data: {
-        imei: imei
-      },
-      success: (res) => {
-        res = JSON.parse(res);
-        let { x, y } = res;
-        store.realtimeData = res;
-        let { realtimeData, initialParams } = store;
-        Object.assign(initialParams, realtimeData, { 'imei': imei })
-      }
-    })
-  }
-  getDeviceData = (imei) => {
-    request({
-      url: `${route}/v1/receive/list`,
-      method: 'GET',
-      data: {
-        imei: imei,
-        startTime,
-        endTime,
-        page: '1',
-        size: '1000'
-      },
-      success: (res) => {
-        res = JSON.parse(res);
-        let data = res.data;
-        data.forEach(e => {
-          e.param.forEach(p => {
-            let { value_name, value } = p
-            let arr = { [value_name]: value };
-            Object.assign(e, arr)
-          })
-        })
-        store.months_data = data;
-      }
-    })
-  }
-  getInitData = (imei) => {
-    request({
-      url: '/api/show_adjust_angle',
-      data: {
-        imei: imei
-      },
-      success: (res) => {
-        res = JSON.parse(res);
-        res = JSON.parse(res);
-        let data = res.data[0];
-        store.initialData = data;
-      }
-    })
-  }
-  getIniRes = (id) => {
-    var ws = new WebSocket('ws://oil.mengant.cn/api/v1/device/init/res?id=' + id)
-    ws.onopen = function (evt) {
-      console.log(evt)
-      console.log('connection open');
-    }
-    ws.onerror = function (evt) {
-      console.log(evt)
-    }
-  }
+
+
   componentDidMount() {
-    console.log('componentDidMount')
-    this.getMachineData();
+    this.getDevicesList();
   }
   calAngle = (x, y) => {
     let cosX = Math.cos(x / 180);
@@ -270,12 +179,12 @@ class Monitor extends React.Component {
         <Row gutter={12} >
           <Col span={6} style={{ height: 900, zIndex: 5 }}>
             <Card title='工作铁塔' style={{ height: "100%" }}>
-              <Search
+              {/* <Search
                 onSearch={value => console.log(value)}
                 enterButton
                 style={{ marginBottom: 5 }}
-              />
-              <Table dataSource={fetchList.data} columns={this.columns} rowKey={record => record.id} size='small' />
+              /> */}
+              <Table dataSource={fetchList} columns={this.columns} rowKey={record => record.id} size='small' />
             </Card>
           </Col>
           <Col>
@@ -284,21 +193,18 @@ class Monitor extends React.Component {
                 <Card title='基本信息' style={{ height: "100%" }} extra={<Button size='small' onClick={() => initialize_modal.visible = true}>初始化</Button>}>
                   <h4>IMEI: <span className={style.basicMessage}>{imei}</span></h4>
                   <h4>名称: <span className={style.basicMessage}>{title}</span></h4>
-                  {/* <h4>所处地质: <span className={style.basicMessage}>平原</span></h4> */}
-                  {/* <h4>地址: <span className={style.basicMessage}></span></h4> */}
                   <h4>启用日期: <span className={style.basicMessage}>{initialData.dateTime}</span></h4>
-                  {/* <h4>传感器已使用时长: <span className={style.basicMessage}>127H</span></h4> */}
                   <h4>警报指数:
                     <Button size='small' type='primary' style={{ float: 'right' }} onClick={() => {
-                      this.getInitData(imei);
                       alarm_modal.visible = true
                     }}>编辑</Button>
                     <span style={{ fontSize: 18 }}>
                       <br />X轴初始角度:{initialData.angle_x}
                       <br />Y轴初始角度:{initialData.angle_y}
-                      <br />初始倾角:{this.calAngle(initialData.angle_x,initialData.angle_y)}
+                      <br />初始倾角:{this.calAngle(initialData.angle_x, initialData.angle_y)}
                       <br />X轴报警指数:{initialData.warn_x}
                       <br /> Y轴报警指数:{initialData.warn_y}
+                      <br /> 初始化结果:{initialData.state}
                     </span></h4>
                 </Card>
               </Col>
@@ -320,7 +226,8 @@ class Monitor extends React.Component {
                 </Card>
               </Col>
               <Col span={14} style={{ height: 260 }}>
-                <Card title='本月工作情况' style={{ height: "100%" }} extra={<Link to='/historyStatus'>历史工作情况</Link>}>
+                {/* extra={<Link to='/historyStatus'>历史工作情况</Link>} */}
+                <Card title='本月工作情况' style={{ height: "100%" }}>
                   <Table columns={this.workColumns} dataSource={months_data} size={"small"} pagination={false} scroll={{ y: 120 }} rowKey={record => record.create_time} />
                 </Card>
               </Col>
@@ -356,6 +263,17 @@ class Monitor extends React.Component {
         <IntializeModal props={initialize_modal} params={initialParams} />
       </Fragment>)
   }
+      getDevicesList = () => {
+        request({
+          url: 'api/show_sensor_list',
+          data: {
+            Tower_owner: '中国铁塔'
+          },
+          success: ({data}) => {
+            store.fetchList = data;
+          }
+        })
+      }
 }
 
 export default Form.create()(Monitor)

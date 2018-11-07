@@ -50,6 +50,7 @@ class IntializeModal extends Component {
       success: (res) => {
         res = JSON.parse(res);
         let id = res.id;
+        console.log(id);
         this.initData()
       },
       complete: () => {
@@ -74,7 +75,7 @@ class IntializeModal extends Component {
     let { x, y, imei} = params;
     let { initialize_modal } = store
     return (
-      <Modal destroyOnClose={true} visible={visible} title='初始化' onCancel={() => initialize_modal.visible = false} onOk={() => {this.deviceInit();}} {...CommonModalConfig} >
+      <Modal visible={visible} title='初始化' onCancel={() => initialize_modal.visible = false} onOk={() => {this.deviceInit();}} {...CommonModalConfig} >
         <Form>
           <Form.Item label='IMEI' {...CommonFormConfig}>
             {getFieldDecorator('imei',{initialValue:imei})(<Input disabled />)}
@@ -90,12 +91,12 @@ class IntializeModal extends Component {
             {...CommonFormConfig}>
             {getFieldDecorator('alarm_x', { initialValue: '' }, {
               rules: [{ required: true, message: '请输入X轴警报值' }],
-            })(<Input placeholder='20' />)}
+            })(<Input placeholder='2' />)}
           </Form.Item>
           <Form.Item label='设置Y轴警报值' {...CommonFormConfig}>
             {getFieldDecorator('alarm_y', { initialValue: '' }, {
               rules: [{ required: true, message: '请输入Y轴警报值' }],
-            })(<Input placeholder='20' />)}
+            })(<Input placeholder='2' />)}
           </Form.Item>
         </Form>
       </Modal>

@@ -1,0 +1,16 @@
+.sideLayout{
+  min-height: 100vh;
+}
+.header{
+   background: #fff; 
+   padding: 0; 
+}
+.subContent{
+  margin: 24px 24px 0;
+  height: 100%;
+  width: 100%;
+}
+.inContent{
+  width: 100%;
+  overflow: hidden;
+}

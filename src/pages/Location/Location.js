@@ -71,7 +71,7 @@ class Location extends Component {
   componentDidMount() {
     window.goMonitor = this.goMonitor
     const textContent = (
-      <div>
+      <div id='div1'>
         <span>地址：江门市蓬江区永盛路</span><br />
         <span> 纬度：22.57511678</span><br />
         <span>经度：113.07812534</span><br />
@@ -104,10 +104,8 @@ class Location extends Component {
       , opts);  // 创建信息窗口对象 
     marker.addEventListener("click", function () {
       map.openInfoWindow(infoWindow, point); //开启信息窗口
-      let btn1 = document.getElementById('btn1');
-      btn1.onclick = function(){
-        alert('111')
-      }
+      let btn1 = document.getElementsByTagName('button')
+      console.log(btn1)
     });
    
   }

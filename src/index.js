@@ -3,24 +3,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './pages/index';
 import {
-  HashRouter as Router,
+  HashRouter,
 } from 'react-router-dom'
-import history from './history'
+import history from './history';
+import globalStore from './globalStore'
+
 const root = document.getElementById('root');
 
 const render = (Com) => {
     ReactDOM.hydrate(
-      <Router>
-        <Com />
-      </Router>
+      <HashRouter>
+        <Com history={history} globalStore={globalStore}/>
+      </HashRouter>
     ,root)
 };
 
 render(App);
 
-// if(module.hot){
-//     module.hot.accept('./pages/index',() => {
-//         const nextApp = require('./pages').default;
-//         render(nextApp);
-//     })
-// }

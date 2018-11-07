@@ -10,7 +10,7 @@ class Store {
     visible: false
   }
   @observable initialData = [];
-  @observable fetchList = {};
+  @observable fetchList = [];
   @observable realtimeData = {};
   @observable initialParams = {};
   @observable history_data = [];

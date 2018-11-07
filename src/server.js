@@ -9,24 +9,19 @@ const options = {
   outFile: 'index.html', // 输出文件的名称
   publicUrl: '/', // 静态资源的 url ，默认为 dist
   watch: true, // 是否需要监听文件并在发生改变时重新编译它们，默认为 process.env.NODE_ENV !== 'production'
-  cache: true, // 启用或禁用缓存，默认为 true
+  cache: false, // 启用或禁用缓存，默认为 true
   target: 'browser', // 可选的目标平台：browser/node/electron，默认为 browser
 }; 
 
 // 使用 file 和 options 参数，初始化新的 bundler
 const bundler = new Bundler(file, options);
 
-// app.use('/v1/*',proxy({
-//   target:'http://oil.mengant.cn/api/',
-//   changeOrigin:true
-// }))
-
 app.use('/api/*', proxy({
-  target: 'http://120.237.31.12:1935/',
+  target: 'http://183.234.29.185:8886/',
   changeOrigin: true
 }))
 // 让 express 使用 bundler 中间件，这将让 parcel 处理你 express 服务器上的每个请求
 app.use(bundler.middleware());
 
 // Listen on port 8080
-app.listen(8080,()=>{console.log('111')});
+app.listen(8080);
