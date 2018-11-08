@@ -9,7 +9,7 @@ const options = {
   outFile: 'index.html', // 输出文件的名称
   publicUrl: '/', // 静态资源的 url ，默认为 dist
   watch: true, // 是否需要监听文件并在发生改变时重新编译它们，默认为 process.env.NODE_ENV !== 'production'
-  cache: false, // 启用或禁用缓存，默认为 true
+  cache: true, // 启用或禁用缓存，默认为 true
   target: 'browser', // 可选的目标平台：browser/node/electron，默认为 browser
 }; 
 

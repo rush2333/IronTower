@@ -49,7 +49,8 @@ function request({ url, method = 'POST', dataType = 'json', data = {}, success =
 					success(data);
 				} else {
 					if (data.code == 3001) {
-						history.push('/login')
+						history.push('/login');
+						sessionStorage.removeItem('user')
 					} else {
 						fail(data);
 					}

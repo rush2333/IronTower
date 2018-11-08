@@ -1,10 +1,10 @@
 export default {
   labelCol: {
-    span: 4,
+    span: 6,
     gutter: 12
   },
   wrapperCol: {
-    span: 18,
+    span: 16,
     gutter: 12
   }
 }

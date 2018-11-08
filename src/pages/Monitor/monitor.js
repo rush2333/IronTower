@@ -38,14 +38,15 @@ now.setDate(now.getDate() - 1);
 var endTime = moment(now).format('YYYY-MM-DD');
 
 const chartData = [];
-for (let i = 0; i < 10; i += 1) {
+for (let i = 0; i < 50; i += 1) {
   chartData.push({
     x: (new Date().getTime()) + (1000 * 60 * 30 * i),
     y1: Math.floor(Math.random() * 10),
   });
 }
 
-const state_type = ['', '正常', '停用']
+const state_type = ['', '正常', '停用'];
+const ini_state = ['', '成功', '待处理'];
 const tabListNoTitle = [{
   key: '倾角图',
   tab: '倾角图',
@@ -86,7 +87,7 @@ class Monitor extends React.Component {
       title: 'IMEI',
       dataIndex: 'imei',
       render: (text, record, index) => {
-        return <a onClick={(e) => { e.preventDefault }}>{text}</a>
+        return <a onClick={(e) => { e.preventDefault;this.getDataList(text) }}>{text}</a>
       }
     },
     {
@@ -98,33 +99,31 @@ class Monitor extends React.Component {
     {
       title: 'IMEI',
       dataIndex: 'imei',
-      width: 120
+      width: 120,
     },
     {
       title: '倾角',
-      dataIndex: '',
+      dataIndex: 'angle',
       width: 90,
-      render: (text, record, index) => (<span>{this.calAngle(record.angleX, record.angleY)}</span>)
-
     },
     {
       title: 'x轴倾角',
-      dataIndex: 'angleX',
+      dataIndex: 'angle_x',
       width: 90
 
     },
     {
       title: 'y轴倾角',
-      dataIndex: 'angleY',
+      dataIndex: 'angle_y',
       width: 90
 
     },
-    {
-      title: '电池电压',
-      dataIndex: 'power',
-      width: 90
+    // {
+    //   title: '电池电压',
+    //   dataIndex: 'power',
+    //   width: 90
 
-    },
+    // },
     {
       title: '状态',
       dataIndex: 'deviceState',
@@ -164,26 +163,18 @@ class Monitor extends React.Component {
   }
   render() {
     let { alarm_modal, initialize_modal, realtimeData, basicMsg, initialParams, months_data, fetchList, initialData } = store;
-    let { imei, title } = basicMsg;
+    let { imei, title, Tower_id, X0, Y0, X1, Y1, create_time, angle, state, update_time } = basicMsg;
     let { x, y } = realtimeData;
-    let angle = this.calAngle(x, y);
+    angle = parseFloat(angle).toFixed(3);
     return (
       <Fragment>
         <Breadcrumb>
           <Breadcrumb.Item>监控页</Breadcrumb.Item>
         </Breadcrumb>
-        {/* <Button onClick={() => { this.calAngle(-0.7,1.39) }}>test</Button>
-        <Button onClick={() => { this.initData() }}>初始化</Button>
-        <Button onClick={() => { this.getInitData(865820035119960) }}>获取</Button>
-        <Button onClick={() => { this.setWarnData() }}>警报</Button> */}
         <Row gutter={12} >
-          <Col span={6} style={{ height: 900, zIndex: 5 }}>
+          <Col span={5} style={{ height: 900, zIndex: 5 }}>
             <Card title='工作铁塔' style={{ height: "100%" }}>
-              {/* <Search
-                onSearch={value => console.log(value)}
-                enterButton
-                style={{ marginBottom: 5 }}
-              /> */}
+              <Search onSearch={value => console.log(value)} enterButton style={{ marginBottom: 5 }} />
               <Table dataSource={fetchList} columns={this.columns} rowKey={record => record.id} size='small' />
             </Card>
           </Col>
@@ -193,35 +184,35 @@ class Monitor extends React.Component {
                 <Card title='基本信息' style={{ height: "100%" }} extra={<Button size='small' onClick={() => initialize_modal.visible = true}>初始化</Button>}>
                   <h4>IMEI: <span className={style.basicMessage}>{imei}</span></h4>
                   <h4>名称: <span className={style.basicMessage}>{title}</span></h4>
-                  <h4>启用日期: <span className={style.basicMessage}>{initialData.dateTime}</span></h4>
-                  <h4>警报指数:
+                  <h4>创建时间: <span className={style.basicMessage}>{create_time}</span></h4>
+                  <h4>警报功能设置
                     <Button size='small' type='primary' style={{ float: 'right' }} onClick={() => {
                       alarm_modal.visible = true
                     }}>编辑</Button>
-                    <span style={{ fontSize: 18 }}>
-                      <br />X轴初始角度:{initialData.angle_x}
-                      <br />Y轴初始角度:{initialData.angle_y}
-                      <br />初始倾角:{this.calAngle(initialData.angle_x, initialData.angle_y)}
-                      <br />X轴报警指数:{initialData.warn_x}
-                      <br /> Y轴报警指数:{initialData.warn_y}
-                      <br /> 初始化结果:{initialData.state}
-                    </span></h4>
+                  </h4>
+                  <span style={{ margin: '0 auto', fontWeight: 'bold' }}>
+                    <br />X轴初始角度:       {X0}°
+                    <br />Y轴初始角度:       {Y0}°
+                    <br />初始倾角:       {angle}°
+                    <br />X轴报警指数:       {X1}°
+                    <br />Y轴报警指数:       {Y1}°
+                    <br />初始化时间:       {update_time}
+                    <br />初始化结果:      {ini_state[state]}
+                  </span>
                 </Card>
               </Col>
               <Col span={14} style={{ marginBottom: 12 }} style={{ height: 180, marginBottom: 10 }}>
                 <Card title='实时工作状态' style={{ height: "100%" }}
-                  extra={<div><span style={{ color: 'green', fontWeight: 'bold', marginRight: 5 }}>正常</span>  最近一次更新：2018-08-29 </div>}>
+                  extra={<div>最近一次更新：{realtimeData.create_time}</div>}>
                   <div style={{ display: 'flex' }}>
                     <div style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}><span>倾角</span></div>
                     <div style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}><span>x轴倾角</span></div>
                     <div style={{ flex: 1, textAlign: 'center', fontWeight: 'bold', fontSize: 16 }}><span>y轴倾角</span></div>
-                    {/* <div style={{ flex:1, textAlign:'center', fontWeight:'bold', fontSize:16 }}><span>电池电压</span></div> */}
                   </div>
                   <div style={{ display: 'flex', marginTop: 10 }}>
-                    <div style={{ flex: 1, textAlign: 'center', fontSize: 28, color: 'green' }}><span>{angle}</span></div>
-                    <div style={{ flex: 1, textAlign: 'center', fontSize: 28, color: 'green' }}><span>{x}</span></div>
-                    <div style={{ flex: 1, textAlign: 'center', fontSize: 28, color: 'green' }}><span>{y}</span></div>
-                    {/* <div style={{ flex:1, textAlign:'center', fontSize:28, color:'green' }}><span>{power}</span></div> */}
+                    <div style={{ flex: 1, textAlign: 'center', fontSize: 28, color: 'green' }}><span>{realtimeData.angle}°</span></div>
+                    <div style={{ flex: 1, textAlign: 'center', fontSize: 28, color: 'green' }}><span>{x}°</span></div>
+                    <div style={{ flex: 1, textAlign: 'center', fontSize: 28, color: 'green' }}><span>{y}°</span></div>
                   </div>
                 </Card>
               </Col>
@@ -244,14 +235,6 @@ class Monitor extends React.Component {
                           />
                         </div>
                       </TabPane>
-                      <TabPane tab="电池电压图" key="2">
-                        <div style={{ padding: '0 24px', marginTop: -30 }}>
-                          <TimelineChart
-                            height={300}
-                            data={chartData}
-                            titleMap={{ y1: '电压', }}
-                          />
-                        </div></TabPane>
                     </Tabs>
                   </div>
                 </Card>
@@ -259,21 +242,75 @@ class Monitor extends React.Component {
             </Row>
           </Col>
         </Row>
-        <EditAlarm props={alarm_modal} params={initialParams} initialDatas={initialData} />
-        <IntializeModal props={initialize_modal} params={initialParams} />
-      </Fragment>)
+        <EditAlarm props={alarm_modal} params={basicMsg} initialDatas={initialData} />
+        <IntializeModal props={initialize_modal} params={basicMsg} date={initialParams} />
+      </Fragment>
+    )
   }
-      getDevicesList = () => {
-        request({
-          url: 'api/show_sensor_list',
-          data: {
-            Tower_owner: '中国铁塔'
-          },
-          success: ({data}) => {
-            store.fetchList = data;
-          }
-        })
+  getDevicesList = () => {
+    request({
+      url: 'api/show_sensor_list',
+      success: ({ data }) => {
+        store.fetchList = data;
+        let imei = data[0].imei
+        this.getDataList(imei);
       }
+    })
+  }
+  getDeviceData = (imei) => {
+    request({
+      url: 'api/show_adjust_angle',
+      data: {
+        imei
+      },
+      success: ({ data }) => {
+        store.basicMsg = data[0];
+        this.getCurrentData(imei);
+      }
+    })
+  }
+  getDataList = (imei) => {
+    request({
+      url: 'api/show_data_list',
+      data: {
+        imei,
+        startTime,
+        endTime,
+        page: 1,
+        size: 31
+      },
+      success: ({ data }) => {
+        store.months_data = data;
+        this.getDeviceData(imei);
+        this.getAngle(imei);
+      }
+    })
+  }
+  getCurrentData = (imei) => {
+    request({
+      url:'api/Lately_data',
+      data:{
+        imei
+      },
+      success: ({data})=>{
+        store.realtimeData = data[0];
+      }
+    })
+  }
+  getAngle = (imei) => {
+    request({
+      url:'api/show_angle',
+      data:{
+        imei,
+        startTime:'2018-08-31',
+        endTime:'2018-11-09',
+      },
+      success: ({data})=>{
+        let angle_value = data.map(v=> v.angle);
+        let date_value = data.map(v => v.create_time);
+      }
+    })
+  }
 }
 
 export default Form.create()(Monitor)

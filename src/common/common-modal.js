@@ -1,4 +1,4 @@
 export default {
-  width: 800,
+  width: 600,
   maskClosable: false
 }

@@ -1,4 +1,4 @@
-.chartsCard canvas {
+/* .chartsCard canvas {
   width: 100% !important;
 }
 .chartsCard :global .ant-tabs-bar {
@@ -12,7 +12,7 @@
 .chartsCard :global .ant-tabs-extra-content {
   padding-right: 24px;
   line-height: 55px;
-}
+} */
 .basicMessage {
   margin-left: 5px;
 }

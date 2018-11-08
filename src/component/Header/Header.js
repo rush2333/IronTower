@@ -6,6 +6,7 @@ import NoticeIcon from 'ant-design-pro/lib/NoticeIcon';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment';
 import Routers from '../../routes/routes';
+import history from '../../history'
 import { observer } from 'mobx-react';
 
 const { Header, Content, Footer, } = Layout;
@@ -13,7 +14,7 @@ const { Header, Content, Footer, } = Layout;
 @observer
 class IncludeHeader extends React.Component {
   render() {
-    let { globalStore, history } = this.props;
+    let { globalStore } = this.props;
     let is_login = !!sessionStorage.getItem('user')
     const menu = (
       <Menu selectedKeys={[]}>

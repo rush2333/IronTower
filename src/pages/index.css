@@ -5,6 +5,9 @@
    background: #fff; 
    padding: 0; 
 }
+.container{
+  min-width: 1550px;
+}
 .subContent{
   margin: 24px 24px 0;
   height: 100%;
@@ -12,5 +15,4 @@
 }
 .inContent{
   width: 100%;
-  overflow: hidden;
 }
