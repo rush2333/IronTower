@@ -31,7 +31,8 @@ class EditAlarm extends Component{
         console.log(res);
       },
       complete: () => {
-        store.alarm_modal.visible = false;
+        store.alarm_modal.visible = false; 
+        this.props.form.resetFields()
       }
     })
   }

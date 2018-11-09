@@ -20,5 +20,7 @@ class Store {
   @observable months_data = [];
   @observable dataSource = [];
   @observable basicMsg = {};
+  @observable angleValue = [];
+  @observable dateValue = [];
 }
 export default new Store();

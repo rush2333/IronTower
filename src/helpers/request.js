@@ -2,7 +2,7 @@ import handleJson from './handle-json';
 import handleFormData from './handle-formdata';
 import handleUrlEncode from './handle-urlencode';
 import history from '../history'
-import { Modal } from "antd";
+import { Modal,message } from "antd";
 
 function request({ url, method = 'POST', dataType = 'json', data = {}, success = () => { }, fail = () => { }, complete = () => { } }) {
 	if (!url) {
@@ -46,8 +46,12 @@ function request({ url, method = 'POST', dataType = 'json', data = {}, success =
 					}
 				}
 				if (parseInt(data.code) === 200) {
+					if (data.msg !== '查询成功!' && data.msg !== '查询成功'){
+						message.success(data.msg);
+					}
 					success(data);
 				} else {
+					message.error(data.msg);
 					if (data.code == 3001) {
 						history.push('/login');
 						sessionStorage.removeItem('user')

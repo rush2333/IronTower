@@ -33,7 +33,7 @@ class IntializeModal extends Component {
         console.log(res);
       },
       complete: () => {
-        store.initialize_modal.visible = false
+        store.initialize_modal.visible = false; this.props.form.resetFields()
       }
     })
   }

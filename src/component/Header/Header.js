@@ -33,7 +33,7 @@ class IncludeHeader extends React.Component {
           <div className={style.right}>
             <Menu mode='horizontal' className={style.menu}>
               <Menu.Item className={`${style["dropdown-button"]} ${style.action}`}>
-                <a href="">首页</a>
+                <a onClick={(e)=>{e.preventDefault()}}>首页</a>
               </Menu.Item>
               <Dropdown overlay={menu} trigger={['click']} placement='bottomCenter'>
                 <span className={`${style["dropdown-button"]} ${style.action}`}><Icon type='user' />admin</span>

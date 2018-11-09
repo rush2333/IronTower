@@ -25,11 +25,16 @@ import Charts from 'ant-design-pro/lib/Charts';
 import { Link } from 'react-router-dom';
 import request from '../../helpers/request';
 import moment from 'moment';
+import ReactEcharts from 'echarts-for-react';
+// import echarts from 'echarts/lib/echarts';
+// import 'echarts/lib/component/title';
+// import 'echarts/lib/component/tooltip';
+// import 'echarts/lib/component/dataZoom';
+// import 'echarts/lib/chart/line'; 
 
-const { TimelineChart } = Charts;
+
 const Search = Input.Search;
-const TabPane = Tabs.TabPane;
-const route = 'http://oil.mengant.cn/api';
+
 const now = new Date();
 now.setDate(1);
 var startTime = moment(now).format('YYYY-MM-DD');
@@ -37,36 +42,10 @@ now.setMonth(now.getMonth() + 1);
 now.setDate(now.getDate() - 1);
 var endTime = moment(now).format('YYYY-MM-DD');
 
-const chartData = [];
-for (let i = 0; i < 50; i += 1) {
-  chartData.push({
-    x: (new Date().getTime()) + (1000 * 60 * 30 * i),
-    y1: Math.floor(Math.random() * 10),
-  });
-}
-
 const state_type = ['', '正常', '停用'];
 const ini_state = ['', '成功', '待处理'];
-const tabListNoTitle = [{
-  key: '倾角图',
-  tab: '倾角图',
-}, {
-  key: '电池工作图',
-  tab: '电池工作图',
-},];
-const topColResponsiveProps = {
-  xs: 24,
-  sm: 12,
-  md: 12,
-  lg: 12,
-  xl: 6,
-  style: { marginBottom: 24 },
-};
-const chartsExtra = (
-  <div>
-    日期：{moment().format('YYYY年MM月DD日')}
-  </div>
-)
+
+
 
 @observer
 class Monitor extends React.Component {
@@ -87,7 +66,7 @@ class Monitor extends React.Component {
       title: 'IMEI',
       dataIndex: 'imei',
       render: (text, record, index) => {
-        return <a onClick={(e) => { e.preventDefault;this.getDataList(text) }}>{text}</a>
+        return <a onClick={(e) => { e.preventDefault; this.getDataList(text) }}>{text}</a>
       }
     },
     {
@@ -118,12 +97,6 @@ class Monitor extends React.Component {
       width: 90
 
     },
-    // {
-    //   title: '电池电压',
-    //   dataIndex: 'power',
-    //   width: 90
-
-    // },
     {
       title: '状态',
       dataIndex: 'deviceState',
@@ -136,7 +109,6 @@ class Monitor extends React.Component {
       width: 150
     },
   ];
-
 
   componentDidMount() {
     this.getDevicesList();
@@ -171,15 +143,15 @@ class Monitor extends React.Component {
         <Breadcrumb>
           <Breadcrumb.Item>监控页</Breadcrumb.Item>
         </Breadcrumb>
-        <Row gutter={12} >
-          <Col span={5} style={{ height: 900, zIndex: 5 }}>
+        <Row gutter={8} >
+          <Col span={5} style={{ height: 800, zIndex: 5 }}>
             <Card title='工作铁塔' style={{ height: "100%" }}>
               <Search onSearch={value => console.log(value)} enterButton style={{ marginBottom: 5 }} />
               <Table dataSource={fetchList} columns={this.columns} rowKey={record => record.id} size='small' />
             </Card>
           </Col>
           <Col>
-            <Row gutter={12}>
+            <Row gutter={8}>
               <Col span={4} style={{ height: 450 }}>
                 <Card title='基本信息' style={{ height: "100%" }} extra={<Button size='small' onClick={() => initialize_modal.visible = true}>初始化</Button>}>
                   <h4>IMEI: <span className={style.basicMessage}>{imei}</span></h4>
@@ -191,13 +163,13 @@ class Monitor extends React.Component {
                     }}>编辑</Button>
                   </h4>
                   <span style={{ margin: '0 auto', fontWeight: 'bold' }}>
-                    <br />X轴初始角度:       {X0}°
-                    <br />Y轴初始角度:       {Y0}°
-                    <br />初始倾角:       {angle}°
-                    <br />X轴报警指数:       {X1}°
-                    <br />Y轴报警指数:       {Y1}°
-                    <br />初始化时间:       {update_time}
-                    <br />初始化结果:      {ini_state[state]}
+                    <br />X轴初始角度: {X0}°
+                    <br />Y轴初始角度: {Y0}°
+                    <br />初始倾角: {angle}°
+                    <br />X轴报警指数: {X1}°
+                    <br />Y轴报警指数: {Y1}°
+                    <br />初始化时间: {update_time}
+                    <br />初始化结果: {ini_state[state]}
                   </span>
                 </Card>
               </Col>
@@ -222,21 +194,9 @@ class Monitor extends React.Component {
                   <Table columns={this.workColumns} dataSource={months_data} size={"small"} pagination={false} scroll={{ y: 120 }} rowKey={record => record.create_time} />
                 </Card>
               </Col>
-              <Col span={18} style={{ marginTop: 10, height: 440 }}>
+              <Col span={18} style={{ marginTop: 10, height: 340 }}>
                 <Card style={{ height: '100%' }} bordered={false} bodyStyle={{ padding: '0 0 32px 0' }}>
-                  <div className={style.chartsCard}>
-                    <Tabs size='large' tabBarExtraContent={chartsExtra}>
-                      <TabPane tab="倾角图" key="1">
-                        <div style={{ padding: '0 24px', marginTop: -30 }}>
-                          <TimelineChart
-                            height={300}
-                            data={chartData}
-                            titleMap={{ y1: '倾角' }}
-                          />
-                        </div>
-                      </TabPane>
-                    </Tabs>
-                  </div>
+                  <ReactEcharts option={this.getOption()} style={{ width: '100%' }} notMerge={true} lazyUpdate={true} ></ReactEcharts>
                 </Card>
               </Col>
             </Row>
@@ -288,29 +248,61 @@ class Monitor extends React.Component {
   }
   getCurrentData = (imei) => {
     request({
-      url:'api/Lately_data',
-      data:{
+      url: 'api/Lately_data',
+      data: {
         imei
       },
-      success: ({data})=>{
+      success: ({ data }) => {
         store.realtimeData = data[0];
       }
     })
   }
   getAngle = (imei) => {
     request({
-      url:'api/show_angle',
-      data:{
+      url: 'api/show_angle',
+      data: {
         imei,
-        startTime:'2018-08-31',
-        endTime:'2018-11-09',
       },
-      success: ({data})=>{
-        let angle_value = data.map(v=> v.angle);
-        let date_value = data.map(v => v.create_time);
+      success: ({ data }) => {
+        let angleValue = data.map(v => v.angle);
+        let dateValue = data.map(v => v.create_time);
+        store.dateValue = dateValue;
+        store.angleValue = angleValue;
       }
     })
   }
+  getOption = () => {
+    return {
+      title: [{
+        left: 'center',
+        text: '倾角变化图'
+      }],
+      tooltip: {
+        trigger: 'axis'
+      },
+      xAxis: [{
+        type: 'category',
+        data: store.dateValue
+      }],
+      yAxis: [{
+        splitLine: { show: false }
+      }],
+      dataZoom: [{
+        show: true,
+        start: 60,
+        end: 95,
+        realtime: true
+      }, {
+        type: 'slider'
+      }],
+      series: [{
+        type: 'line',
+        showSymbol: true,
+        data: store.angleValue
+      }]
+    }
+  }
 }
+
 
 export default Form.create()(Monitor)
