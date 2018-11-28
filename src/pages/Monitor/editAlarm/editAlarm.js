@@ -15,55 +15,53 @@ class EditAlarm extends Component{
   setWarnData = () => {
     let { getFieldsValue } = this.props.form;
     let values = getFieldsValue();
-    let { imei, angle_x, angle_y, alarm_x, alarm_y, phone } = values;
+    let { imei, angle_x, angle_y, warn_x, warn_y, phone } = values;
     request({
       url: '/api/Set_warn',
       data: {
         imei: imei,
         Tower_id: 1,
-        warn_x: alarm_x,
-        warn_y: alarm_y,
-        phone: phone
+        angle_x,
+        angle_y,
+        warn_x,
+        warn_y,
+        phone: phone,
       },
       success: (res) => {
-        res = JSON.parse(res)
-        res = JSON.parse(res);
-        alert(res.msg)
-        this.deviceInit(imei, angle_x, angle_y, alarm_x, alarm_y)
-
+        console.log(res);
       },
       complete: () => {
-        store.alarm_modal.visible = false
+        store.alarm_modal.visible = false; 
+        this.props.form.resetFields()
       }
     })
   }
-  deviceInit = (imei,angle_x,angle_y,alarm_x,alarm_y) => {                                     /**设备初始化 */
-    request({
-      url: `${route}/v1/device/init`,
-      method: 'GET',
-      data: {
-        "imei": imei,
-        "X0": angle_x,
-        "Y0": angle_y,
-        "X1": alarm_x,
-        "Y1": alarm_y
-      },
-      success: (res) => {
-        // res = JSON.parse(res);
-        // let id = res.id;
-        // this.initData()
-      },
-      complete: () => {
-        // store.initialize_modal.visible = false
-      }
-    })
-  }
+  // deviceInit = (imei,angle_x,angle_y,alarm_x,alarm_y) => {                                     /**设备初始化 */
+  //   request({
+  //     url: `${route}/v1/device/init`,
+  //     method: 'GET',
+  //     data: {
+  //       "imei": imei,
+  //       "X0": angle_x,
+  //       "Y0": angle_y,
+  //       "X1": alarm_x,
+  //       "Y1": alarm_y
+  //     },
+  //     success: (res) => {
+  //       // res = JSON.parse(res);
+  //       // let id = res.id;
+  //       // this.initData()
+  //     },
+  //     complete: () => {
+  //       // store.initialize_modal.visible = false
+  //     }
+  //   })
+  // }
   render(){
     const { getFieldDecorator } = this.props.form;
-    let { props, params, initialDatas } = this.props;
+    let { props, params } = this.props;
     let { visible } = props;
-    let { imei } = params
-    let {angle_x, angle_y, Tower_id} = initialDatas;
+    let { imei, Tower_id, X0, Y0, angle } = params;
     return(
       <Modal visible={visible} title='警报指数设置'{...CommonModalConfig} onCancel={() => store.alarm_modal.visible = false} onOk={() => {this.setWarnData()}}>
         <Form>
@@ -91,7 +89,7 @@ class EditAlarm extends Component{
           </FormItem>
           <FormItem label='X轴初始角度：' {...CommonFormConfig}>
             {
-              getFieldDecorator('angle_x', { initialValue: angle_x },{
+              getFieldDecorator('angle_x', { initialValue: X0 },{
                 rules: [{
                   required: true, message: '请输入倾角值',
                 }],
@@ -102,7 +100,7 @@ class EditAlarm extends Component{
           </FormItem>
           <FormItem label='Y轴初始角度：' {...CommonFormConfig}>
             {
-              getFieldDecorator('angle_y', { initialValue: angle_y },{
+              getFieldDecorator('angle_y', { initialValue: Y0 },{
                 rules: [{
                   required: true, message: '请输入倾角值',
                 }],
@@ -111,17 +109,13 @@ class EditAlarm extends Component{
               )
             }
           </FormItem>
-          {/* <FormItem label='初始倾斜角：' {...CommonFormConfig}>
+          <FormItem label='初始倾斜角：' {...CommonFormConfig}>
             {
-              getFieldDecorator('initialTilt', {
-                rules: [{
-                  required: true, message: '请输入倾角值',
-                }],
-              })(
+              getFieldDecorator('initialTilt', { initialValue: angle },)(
                 <Input disabled />
               )
             }
-          </FormItem> */}
+          </FormItem>
           <FormItem label='X轴预警值：' {...CommonFormConfig}>
             {
               getFieldDecorator('warn_x', {

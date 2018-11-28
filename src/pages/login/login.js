@@ -16,6 +16,7 @@ class Login extends Component {
   }
   render() {
     let { form, globalStore } = this.props;
+    let is_login = !!sessionStorage.getItem('user')
     let { getFieldDecorator, getFieldsError, isFieldTouched, getFieldError } = form;
     let { isLogin } = globalStore;
     let { params, loading } = store;
@@ -25,7 +26,7 @@ class Login extends Component {
     let btnErr = this.hasErrors(getFieldsError()) || userErr || passwordErr;
     return (
       <div className={st.container}>
-        {isLogin ? <Redirect to='/' /> : 
+        {is_login ? <Redirect to='/' /> : 
         <div className={st.form}>
           <Spin spinning={loading} indicator={antIcon} tip='登陆中...'>
             <Form>
