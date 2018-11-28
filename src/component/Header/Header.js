@@ -9,13 +9,13 @@ import Routers from '../../routes/routes';
 import history from '../../history'
 import { observer } from 'mobx-react';
 
-const { Header, Content, Footer, } = Layout;
 
 @observer
 class IncludeHeader extends React.Component {
   render() {
     let { globalStore } = this.props;
     let is_login = !!sessionStorage.getItem('user')
+    let user = sessionStorage.getItem('user');
     const menu = (
       <Menu selectedKeys={[]}>
         <Menu.Item>
@@ -36,7 +36,7 @@ class IncludeHeader extends React.Component {
                 <a onClick={(e)=>{e.preventDefault()}}>首页</a>
               </Menu.Item>
               <Dropdown overlay={menu} trigger={['click']} placement='bottomCenter'>
-                <span className={`${style["dropdown-button"]} ${style.action}`}><Icon type='user' />admin</span>
+                <span className={`${style["dropdown-button"]} ${style.action}`}><Icon type='user' />{user}</span>
               </Dropdown>
             </Menu>
           </div>

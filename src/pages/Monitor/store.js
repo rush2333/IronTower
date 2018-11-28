@@ -22,5 +22,7 @@ class Store {
   @observable basicMsg = {};
   @observable angleValue = [];
   @observable dateValue = [];
+  @observable xValue = [];
+  @observable yValue = [];
 }
 export default new Store();

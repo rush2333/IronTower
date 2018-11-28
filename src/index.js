@@ -6,7 +6,7 @@ import {
   HashRouter,
   Route, 
 } from 'react-router-dom'
-import globalStore from './globalStore'
+import globalStore from './globalStore';
 
 const root = document.getElementById('root');
 

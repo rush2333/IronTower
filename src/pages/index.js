@@ -13,9 +13,9 @@ class App extends React.Component {
 		let unLogin = pathName === '/login' || (pathName !== '/login' && sessionStorage.getItem('user'));
 		let is_login = !!sessionStorage.getItem('user')
 		return unLogin ? (
-			<Layout className={style.sideLayout} style={{ overflowY: 'hidden', overflowX: 'scroll'}}>
+			<Layout className={style.sideLayout}>
 				{(is_login ? <SideMenu /> : null)}
-				<Layout className={style.container}>
+				<Layout>
 					<Header className={style.header}>
 						<IncludeHeader hash={location.hash} globalStore={globalStore} />
 					</Header>

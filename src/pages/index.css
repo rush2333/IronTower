@@ -1,12 +1,13 @@
 .sideLayout{
-  min-height: 100vh;
+   min-height: 100vh;
 }
 .header{
+   width: 100%;
    background: #fff; 
    padding: 0; 
 }
 .container{
-  min-width: 1550px;
+  width: 100%;
 }
 .subContent{
   margin: 24px 24px 0;

@@ -2,15 +2,8 @@ import React, { Fragment } from 'react';
 import {
   Row,
   Col,
-  Icon,
   Card,
-  Tabs,
   Table,
-  Radio,
-  DatePicker,
-  Tooltip,
-  Menu,
-  Dropdown,
   Input,
   Button,
   Breadcrumb,
@@ -21,17 +14,10 @@ import IntializeModal from './initializeDevice/initializeDevice'
 import store from './store';
 import { observer } from "mobx-react";
 import style from './monitor.css';
-import Charts from 'ant-design-pro/lib/Charts';
 import { Link } from 'react-router-dom';
 import request from '../../helpers/request';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
-// import echarts from 'echarts/lib/echarts';
-// import 'echarts/lib/component/title';
-// import 'echarts/lib/component/tooltip';
-// import 'echarts/lib/component/dataZoom';
-// import 'echarts/lib/chart/line'; 
-
 
 const Search = Input.Search;
 
@@ -152,7 +138,7 @@ class Monitor extends React.Component {
           </Col>
           <Col>
             <Row gutter={8}>
-              <Col span={4} style={{ height: 450 }}>
+              <Col span={5} style={{ height: 450 }}>
                 <Card title='基本信息' style={{ height: "100%" }} extra={<Button size='small' onClick={() => initialize_modal.visible = true}>初始化</Button>}>
                   <h4>IMEI: <span className={style.basicMessage}>{imei}</span></h4>
                   <h4>名称: <span className={style.basicMessage}>{title}</span></h4>
@@ -162,18 +148,18 @@ class Monitor extends React.Component {
                       alarm_modal.visible = true
                     }}>编辑</Button>
                   </h4>
-                  <span style={{ margin: '0 auto', fontWeight: 'bold' }}>
-                    <br />X轴初始角度: {X0}°
-                    <br />Y轴初始角度: {Y0}°
-                    <br />初始倾角: {angle}°
-                    <br />X轴报警指数: {X1}°
-                    <br />Y轴报警指数: {Y1}°
-                    <br />初始化时间: {update_time}
-                    <br />初始化结果: {ini_state[state]}
-                  </span>
+                  <h4 style={{ margin: '0 auto', fontSize: 16, whiteSpace: 'pre' }}>
+                    <br />X轴初始角度:  {X0}°
+                    <br />Y轴初始角度:  {Y0}°
+                    <br />X轴报警指数:  {X1}°
+                    <br />Y轴报警指数:  {Y1}°
+                    <br />初始倾斜角度:  {angle}°
+                    <br />初始化时间:  {update_time}
+                    <br />初始化结果:  {ini_state[state]}
+                  </h4>
                 </Card>
               </Col>
-              <Col span={14} style={{ marginBottom: 12 }} style={{ height: 180, marginBottom: 10 }}>
+              <Col span={13} style={{ marginBottom: 12 }} style={{ height: 180, marginBottom: 10 }}>
                 <Card title='实时工作状态' style={{ height: "100%" }}
                   extra={<div>最近一次更新：{realtimeData.create_time}</div>}>
                   <div style={{ display: 'flex' }}>
@@ -188,7 +174,7 @@ class Monitor extends React.Component {
                   </div>
                 </Card>
               </Col>
-              <Col span={14} style={{ height: 260 }}>
+              <Col span={13} style={{ height: 260 }}>
                 {/* extra={<Link to='/historyStatus'>历史工作情况</Link>} */}
                 <Card title='本月工作情况' style={{ height: "100%" }}>
                   <Table columns={this.workColumns} dataSource={months_data} size={"small"} pagination={false} scroll={{ y: 120 }} rowKey={record => record.create_time} />
@@ -266,19 +252,32 @@ class Monitor extends React.Component {
       success: ({ data }) => {
         let angleValue = data.map(v => v.angle);
         let dateValue = data.map(v => v.create_time);
+        let xValue = data.map(v => v.angle_x);
+        let yValue = data.map(v => v.angle_y);
         store.dateValue = dateValue;
         store.angleValue = angleValue;
+        store.xValue = xValue;
+        store.yValue = yValue;
       }
     })
   }
   getOption = () => {
     return {
       title: [{
-        left: 'center',
+        left: '3%',
         text: '倾角变化图'
       }],
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
       tooltip: {
         trigger: 'axis'
+      },
+      legend:{
+        data:['总倾角','x轴倾角','y轴倾角']
       },
       xAxis: [{
         type: 'category',
@@ -295,11 +294,26 @@ class Monitor extends React.Component {
       }, {
         type: 'slider'
       }],
-      series: [{
-        type: 'line',
-        showSymbol: true,
-        data: store.angleValue
-      }]
+      series: [
+        {
+          name:'总倾角',
+          type: 'line',
+          showSymbol: true,
+          data: store.angleValue
+        },
+        {
+          name:'x轴倾角',
+          type: 'line',
+          showSymbol: true,
+          data: store.xValue
+        },
+        {
+          name:'y轴倾角',
+          type: 'line',
+          showSymbol: true,
+          data: store.yValue
+        }
+      ]
     }
   }
 }

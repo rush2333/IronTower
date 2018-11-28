@@ -7,7 +7,6 @@
 }
 :global .ant-layout {
   min-height: 100vh;
-  overflow-x: hidden;
 }
 .logo {
   background: url('../../img//TieTa.png') no-repeat center;
